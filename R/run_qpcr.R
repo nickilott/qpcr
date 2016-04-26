@@ -10,6 +10,7 @@
 library("plyr")
 library("ggplot2")
 library("optparse")
+library("gtools")
 
 # make options list
 option_list <- list(
@@ -86,7 +87,12 @@ dat.ave$rep <- reps
 
 # plot 2^deltaCt
 genes <- unique(dat.ave$gene)
-plot.order <- unlist(strsplit(opt$`plot-order`, ","))
+
+if (!(is.null(opt$`plot-order`))){
+   plot.order <- unlist(strsplit(opt$`plot-order`, ","))}else{
+   plot.order <- mixedsort(unique(dat.ave$cond))
+}
+
 for (gene in genes){
     outname <- paste(gene, "pdf", sep = ".")
     res <- dat.ave[dat.ave$gene == gene,]

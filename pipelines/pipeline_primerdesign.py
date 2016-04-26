@@ -112,7 +112,7 @@ def readIdentifiers(identifiers):
     '''
     return list of identifiers from file
     '''
-    ids = [x[:-1] for x in IOTools.openFile(identifiers).readlines()]
+    ids = [x.strip("\n") for x in IOTools.openFile(identifiers).readlines()]
     return ids
 
 ###################################################
@@ -167,13 +167,13 @@ def buildInputFiles(infile, outfiles):
     for f in FastaIterator.iterate(IOTools.openFile(fasta)):
         if f.title in ids:
             outf = IOTools.openFile(os.path.join(
-                "input.dir",f.title.replace(" ", "_") + ".input").replace('"', ''), "w")
+                "input.dir",f.title.replace(" ", "_").replace("/","_") + ".input").replace('"', ''), "w")
             seq = f.sequence
-            outf.write("PRIMER_SEQUENCE_ID=%s\n" % f.title)
+            outf.write("SEQUENCE_ID=%s\n" % f.title)
             for key, value in PARAMS.iteritems():
                 if "constraints" in key:
                     outf.write("%s=%s\n" % (key.replace("constraints_", "").upper(), value))
-            outf.write("SEQUENCE=%s\n=\n" % seq)
+            outf.write("SEQUENCE_TEMPLATE=%s\n=\n" % seq)
             outf.close()
 
 
@@ -224,6 +224,9 @@ def buildOptimalPrimerSet(infiles, outfile):
                               primerset.size]) + "\n")
     outf.close()
 
-
+@follows(buildOptimalPrimerSet)    
+def full():
+    pass
+    
 if __name__== "__main__":
     sys.exit( P.main(sys.argv) )    

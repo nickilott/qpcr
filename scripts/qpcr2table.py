@@ -34,7 +34,10 @@ def buildWellToSample(layout):
         assert len(data) == 24, "plate layout in wrong format, please review input"
         for i in range(len(data)):
             well = rows[c] + str(i + 1)
-            sample = data[i]
+            if data[i] == "":
+                sample = "NA"
+            else:
+                sample = data[i]
             well2sample[well] = sample
         c += 1
     return well2sample
@@ -85,5 +88,6 @@ sys.stdout.write("well\tsample\tCt\tgene\n")
 for well, sample in well2sample.iteritems():
     if sample == "NA":
         continue
+    
     sys.stdout.write("%s\t%s\t%s\t%s\n" % (well, sample, well2ct[well], well2gene[well]))
 
