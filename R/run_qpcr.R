@@ -103,7 +103,7 @@ for (gene in genes){
     plot3 <- plot2 + ggtitle(gene)
     plot4 <- plot3 + theme(axis.text.x=element_text(angle=45, hjust=1, vjust=1))
     plot5 <- plot4 + xlab("Condition") + ylab("2^deltaCT")
-    plot5 + scale_colour_discrete(name="Condition")
+    plot5 + scale_colour_discrete(name="Condition") + theme_bw()
     ggsave(outname)
     }
 
