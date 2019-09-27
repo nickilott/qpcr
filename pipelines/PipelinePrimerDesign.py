@@ -7,7 +7,7 @@
 ###################################################
 ###################################################
 
-import CGAT.IOTools as IOTools
+import cgatcore.iotools as IOTools
 
 class PrimerSet(object):
     '''
@@ -28,29 +28,29 @@ class PrimerSet(object):
 
 
     def readName(self, inf):
-        inf = IOTools.openFile(inf)
+        inf = IOTools.open_file(inf)
         return inf.readline()[len("PRIMER PICKING RESULTS FOR "):-1]
         
     def readForward(self, inf):
-        inf = IOTools.openFile(inf)
+        inf = IOTools.open_file(inf)
         for line in inf.readlines():
             if line.startswith("LEFT PRIMER"):
                 data = line[:-1].split(" ")
                 data = [x for x in data if x != ""]
-                forward_seq, forward_gc, forward_tm, forward_len = data[9], data[5], data[4], data[3]
+                forward_seq, forward_gc, forward_tm, forward_len = data[10], data[5], data[4], data[3]
         return forward_seq, forward_gc, forward_tm, forward_len
 
     def readReverse(self, inf):
-        inf = IOTools.openFile(inf)
+        inf = IOTools.open_file(inf)
         for line in inf.readlines():
             if line.startswith("RIGHT"):
                 data = line[:-1].split(" ")
                 data = [x for x in data if x != ""]
-                reverse_seq, reverse_gc, reverse_tm, reverse_len = data[9], data[5], data[4], data[3]
+                reverse_seq, reverse_gc, reverse_tm, reverse_len = data[10], data[5], data[4], data[3]
         return reverse_seq, reverse_gc, reverse_tm, reverse_len
 
     def readSize(self, inf):
-        inf = IOTools.openFile(inf)
+        inf = IOTools.open_file(inf)
         for line in inf.readlines():
             if line.startswith("PRODUCT SIZE"):
                 data = line[:-1].split(" ")
@@ -59,20 +59,7 @@ class PrimerSet(object):
         return size
 
     def parse(self,
-              name, 
-              size,
-              forward_seq,
-              forward_gc,
-              forward_tm,
-              forward_len,
-              reverse_seq,
-              reverse_gc,
-              reverse_tm,
-              reverse_len):
-              
-        self.forwardseq, self.forwardgc, self.forwardtm, self.forwardlength = forward_seq, forward_gc, forward_tm, forward_len
-        self.reverseseq, self.reversegc, self.reversetm, self.reverselength = reverse_seq, reverse_gc, reverse_tm, reverse_len
-        self.name = name
-        self.size = size
+              attributes=[]):
+        self.name, self.size, self.forwardseq, self.forwardgc, self.forwardtm, self.forwardlength, self.reverseseq, self.reversegc, self.reversetm, self.reverselength = attributes
         return self
 
